@@ -5,7 +5,11 @@ async function scrapeReviews(options) {
 
     const browser = await puppeteer.launch({
         headless: true,
-        ignoreHTTPSErrors: true
+        ignoreHTTPSErrors: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ]
     });
 
     const page = await browser.newPage();
