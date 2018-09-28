@@ -4,10 +4,9 @@ const fs = require('fs');
 const csv = require('csvtojson');
 const scrapeReviews = require('./scrape-reviews');
 const compileReviews = require('./compile-reviews');
-const helpers = require('./helpers');
 
 const options = {
-    url: `https://www.yext.com/s/${process.env.YEXT_ACCOUNT_ID}/reviews`,
+    url: `https://www.yext.com/s/${process.env.YEXT_ACCOUNT_ID}/reviews/`,
     output: path.join(__dirname, './data/raw-reviews.json'),
     compiledOutput: path.join(__dirname, './data/reviews.json')
 };
@@ -15,12 +14,9 @@ const options = {
 async function run() {
 
     console.log('Scraping reviews');
-    await scrapeReviews(options);
+    let data = await scrapeReviews(options);
 
-    const donloadedFile = process.env.DOWNLOADS_PATH + process.env.FILE_PREFIX + helpers.getDateString({ delimiter: '', format: 'yyyymmdd' }) + '.csv';
-
-    const inputData = await fs.readFileSync(donloadedFile, 'utf8');
-    const reviews = await csv().fromString(inputData);
+    const reviews = await csv().fromString(data);
 
     console.log('Writing output');
     fs.writeFile(options.output, JSON.stringify(reviews), err => {
