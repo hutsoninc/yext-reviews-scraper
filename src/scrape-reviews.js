@@ -2,20 +2,15 @@ const puppeteer = require('puppeteer');
 const helpers = require('./helpers');
 
 async function scrapeReviews(options) {
-
     const browser = await puppeteer.launch({
         headless: true,
         ignoreHTTPSErrors: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-        ]
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     const page = await browser.newPage();
 
     try {
-
         await page.goto(options.url);
 
         // Wait for page content to load
@@ -28,11 +23,10 @@ async function scrapeReviews(options) {
 
         await helpers.delay(10000);
 
-        const result = await page.evaluate(async (options) => {
+        const result = await page.evaluate(async options => {
             return fetch(options.url + 'export', {
-                method: 'GET'
-            })
-                .then(response => response.text());
+                method: 'GET',
+            }).then(response => response.text());
         }, options);
 
         await browser.close();
@@ -40,7 +34,6 @@ async function scrapeReviews(options) {
         console.log('Scraped reviews');
 
         return result;
-
     } catch (error) {
         console.log(error);
         browser.close();

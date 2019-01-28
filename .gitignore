@@ -1,16 +1,5 @@
-# System generated files
-.DS_Store
-
-# Cache
-.cache
-
-# Logs
+node_modules/
 logs/
 *.log
-
-# Dependency directories
-node_modules/
-
-# Production/Environment
 .env
 data/
